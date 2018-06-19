@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Woz.Functional.Monads;
 using Xunit;
 
@@ -12,6 +13,16 @@ namespace Test.Woz.Functional.Monads
             Assert.Equal(5, 5.ToSome().Value);
             Assert.Equal(5, 5.ToMaybe().Value);
             Assert.Equal(Maybe<int>.None.HasValue, ((int?)null).ToMaybe().HasValue);
+        }
+
+        [Fact]
+        public void ImplicitConstruction()
+        {
+            Maybe<int> some = 5;
+            Assert.Equal(5, some.Value);
+
+            Maybe<string> none = null;
+            Assert.False(none.HasValue);
         }
 
         [Fact]
@@ -100,6 +111,16 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void Tee()
+        {
+            var value = 0;
+            Assert.Equal(5, 5.ToSome().Tee(x => value = x).Value);
+            Assert.Equal(5, value);
+
+            Assert.False(Maybe<int>.None.Tee(x => { throw new Exception(); }).HasValue);
+        }
+
+        [Fact]
         public void RecoverValue()
         {
             Assert.Equal(5, 5.ToSome().Recover(7).Value);
@@ -111,6 +132,31 @@ namespace Test.Woz.Functional.Monads
         {
             Assert.Equal(5, 5.ToSome().Recover(() => 7).Value);
             Assert.Equal(7, Maybe<int>.None.Recover(() => 7).Value);
+        }
+
+        [Fact]
+        public void MaybeMin()
+        {
+            Assert.Equal(1, new[] { 3, 4, 1, 6, 2 }.MaybeMin().Value);
+            Assert.Equal(1, new[] { new { Id = 2 }, new { Id = 1 } }.MaybeMin(x => x.Id).Value);
+            Assert.False(new int[0].MaybeMin().HasValue);
+        }
+
+        [Fact]
+        public void MaybeMax()
+        {
+            Assert.Equal(6, new[] { 3, 4, 1, 6, 2 }.MaybeMax().Value);
+            Assert.Equal(2, new[] { new { Id = 2 }, new { Id = 1 } }.MaybeMax(x => x.Id).Value);
+            Assert.False(new int[0].MaybeMax().HasValue);
+        }
+
+        [Fact]
+        public void MaybeFind()
+        {
+            var dict = new Dictionary<int, string> { [1] = "A", [2] = "B" };
+
+            Assert.Equal("A", dict.MaybeFind(1).Value);
+            Assert.False(dict.MaybeFind(3).HasValue);
         }
     }
 }
