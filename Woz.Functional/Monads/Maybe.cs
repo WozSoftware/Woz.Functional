@@ -56,6 +56,8 @@ namespace Woz.Functional.Monads
         #endregion
 
         #region Utility
+        public static Maybe<T> Flattern<T>(this Maybe<Maybe<T>> maybeMaybe) => maybeMaybe.SelectMany(Identity);
+
         public static TR Match<T, TR>(this Maybe<T> maybe, Func<T, TR> someFunc, Func<TR> noneFunc)
             => maybe.HasValue ? someFunc(maybe.Value) : noneFunc();
 

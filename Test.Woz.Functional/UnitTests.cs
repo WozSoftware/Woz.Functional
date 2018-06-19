@@ -6,7 +6,7 @@ namespace Test.Woz.Functional
     public class UnitTests
     {
         [Fact]
-        public void AllThatItRequired()
+        public void AllThatIsRequired()
         {
             Assert.Equal(Unit.Value, Unit.Value);
         }

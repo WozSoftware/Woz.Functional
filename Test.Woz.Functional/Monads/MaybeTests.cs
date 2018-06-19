@@ -41,6 +41,14 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void SelectManySimple()
+        {
+            var result = 5.ToSome().SelectMany(value => (value + 3).ToSome());
+
+            Assert.Equal(8, result.Value);
+        }
+
+        [Fact]
         public void SelectManyBothSome()
         {
             var result =
@@ -90,11 +98,20 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void Flattern()
+        {
+            Assert.Equal(5, 5.ToSome().ToSome().Flattern().Value);
+            Assert.False(5.ToSome().Where(_ => false).HasValue);
+            Assert.False(Maybe<int>.None.Where(_ => true).HasValue);
+            Assert.False(Maybe<int>.None.Where(_ => false).HasValue);
+        }
+
+        [Fact]
         public void MatchMatchStyle()
         {
             const string failed = "failed";
-            Func<int, string> someFunc = x => x.ToString();
-            Func<string> noneFunc = () => failed;
+            string someFunc(int x) => x.ToString();
+            string noneFunc() => failed;
 
             Assert.Equal("5", 5.ToSome().Match(someFunc, noneFunc));
             Assert.Equal(failed, Maybe<int>.None.Match(someFunc, noneFunc));
@@ -103,8 +120,8 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void MatchBindStyle()
         {
-            Func<int, Maybe<string>> someFunc = x => x.ToString().ToSome();
-            Func<Maybe<string>> noneFunc = () => Maybe<string>.None;
+            Maybe<string> someFunc(int x) => x.ToString().ToSome();
+            Maybe<string> noneFunc() => Maybe<string>.None;
 
             Assert.Equal("5", 5.ToSome().Match(someFunc, noneFunc).Value);
             Assert.False(Maybe<int>.None.Match(someFunc, noneFunc).HasValue);
