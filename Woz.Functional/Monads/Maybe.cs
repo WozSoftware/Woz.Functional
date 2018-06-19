@@ -51,6 +51,9 @@ namespace Woz.Functional.Monads
         #endregion
 
         #region Recovery
+        public static TR Match<T, TR>(this Maybe<T> maybe, Func<T, TR> someFunc, Func<TR> noneFunc)
+            => maybe.HasValue ? someFunc(maybe.Value) : noneFunc();
+
         public static Maybe<T> Recover<T>(this Maybe<T> maybe, T defaultValue)
             => maybe.HasValue ? maybe : defaultValue.ToMaybe();
 

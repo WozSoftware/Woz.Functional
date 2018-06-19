@@ -79,6 +79,27 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void MatchMatchStyle()
+        {
+            const string failed = "failed";
+            Func<int, string> someFunc = x => x.ToString();
+            Func<string> noneFunc = () => failed;
+
+            Assert.Equal("5", 5.ToSome().Match(someFunc, noneFunc));
+            Assert.Equal(failed, Maybe<int>.None.Match(someFunc, noneFunc));
+        }
+
+        [Fact]
+        public void MatchBindStyle()
+        {
+            Func<int, Maybe<string>> someFunc = x => x.ToString().ToSome();
+            Func<Maybe<string>> noneFunc = () => Maybe<string>.None;
+
+            Assert.Equal("5", 5.ToSome().Match(someFunc, noneFunc).Value);
+            Assert.False(Maybe<int>.None.Match(someFunc, noneFunc).HasValue);
+        }
+
+        [Fact]
         public void RecoverValue()
         {
             Assert.Equal(5, 5.ToSome().Recover(7).Value);
