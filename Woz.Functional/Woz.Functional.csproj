@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Woz</Authors>
+    <Company>Woz.Software</Company>
+    <Description>Functional code tool kit for C#</Description>
+    <Copyright>Woz.Software</Copyright>
+    <PackageProjectUrl>https://github.com/WozSoftware/Woz.Functional</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WozSoftware/Woz.Functional.git</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageLicenseUrl>https://github.com/WozSoftware/Woz.Functional/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+</Project>
