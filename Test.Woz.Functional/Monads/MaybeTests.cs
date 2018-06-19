@@ -10,9 +10,7 @@ namespace Test.Woz.Functional.Monads
         public void Construction()
         {
             Assert.Equal(5, 5.ToSome().Value);
-
             Assert.Equal(5, 5.ToMaybe().Value);
-
             Assert.Equal(Maybe<int>.None.HasValue, ((int?)null).ToMaybe().HasValue);
         }
 
@@ -85,6 +83,13 @@ namespace Test.Woz.Functional.Monads
         {
             Assert.Equal(5, 5.ToSome().Recover(7).Value);
             Assert.Equal(7, Maybe<int>.None.Recover(7).Value);
+        }
+
+        [Fact]
+        public void RecoverValueFactory()
+        {
+            Assert.Equal(5, 5.ToSome().Recover(() => 7).Value);
+            Assert.Equal(7, Maybe<int>.None.Recover(() => 7).Value);
         }
     }
 }
