@@ -44,9 +44,8 @@ namespace Woz.Functional.Monads
 
         public static Maybe<TR> SelectMany<T1, T2, TR>(
             this Maybe<T1> maybe, Func<T1, Maybe<T2>> selector, Func<T1, T2, TR> projection)
-            => maybe.HasValue
-                ? selector(maybe.Value).Select(value => projection(maybe.Value, value))
-                : Maybe<TR>.None;
+            => maybe.SelectMany(
+                value1 => selector(value1).SelectMany(value2 => projection(value1, value2).ToMaybe()));
 
         public static Maybe<TR> Select<T, TR>(this Maybe<T> maybe, Func<T, TR> selector)
             => maybe.SelectMany(x => selector(x).ToMaybe());
@@ -73,7 +72,7 @@ namespace Woz.Functional.Monads
 
         #region Recovery
         public static Maybe<T> Recover<T>(this Maybe<T> maybe, T defaultValue)
-            => maybe.HasValue ? maybe : defaultValue.ToMaybe();
+            => maybe.Recover(() => defaultValue);
 
         public static Maybe<T> Recover<T>(this Maybe<T> maybe, Func<T> defaultFactory)
             => maybe.HasValue ? maybe : defaultFactory().ToMaybe();

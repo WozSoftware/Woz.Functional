@@ -11,7 +11,7 @@ namespace Woz.Functional.Monads
 
         public static Lazy<TR> SelectMany<T1, T2, TR>(
             this Lazy<T1> lazy, Func<T1, Lazy<T2>> selector, Func<T1, T2, TR> projection)
-            => new Lazy<TR>(() => selector(lazy.Value).Select(value => projection(lazy.Value, value)).Value);
+            => lazy.SelectMany(value1 => selector(value1).Select(value2 => projection(value1, value2)));
 
         public static Lazy<TR> Select<T, TR>(this Lazy<T> lazy, Func<T, TR> selector)
             => new Lazy<TR>(() => selector(lazy.Value));
