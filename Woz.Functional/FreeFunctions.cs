@@ -11,7 +11,5 @@
         public static TL Left<TL, TR>(TL left, TR right) => left;
         public static TR Right<TL, TR>(TL left, TR right) => right;
 
-        public static bool IsTrue<T>(T value) => true;
-        public static bool IsFalse<T>(T value) => false;
     }
 }
