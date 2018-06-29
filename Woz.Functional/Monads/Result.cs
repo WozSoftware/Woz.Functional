@@ -55,5 +55,19 @@ namespace Woz.Functional.Monads
         public static Result<TR, TE> Select<T, TR, TE>(this Result<T, TE> result, Func<T, TR> selector)
             => result.SelectMany(x => Result<TR, TE>.Create(selector(x)));
         #endregion
+
+        #region Exception Wrapping
+        public static Result<T, Exception> Try<T>(Func<T> task)
+        {
+            try
+            {
+                return Result<T, Exception>.Create(task());
+            }
+            catch (Exception e)
+            {
+                return Result<T, Exception>.Raise(e);
+            }
+        }
+        #endregion
     }
 }

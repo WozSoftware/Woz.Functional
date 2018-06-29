@@ -73,5 +73,14 @@ namespace Test.Woz.Functional.Monads
             Assert.Equal(6, Result<int, string>.Create(5).Select(value => value + 1).Value);
             Assert.False(ErrorResult.Select(x => x + 1).HasValue);
         }
+
+        [Fact]
+        public void Try()
+        {
+            var exception = new Exception("Bang");
+
+            Assert.Equal(5, Result.Try(() => 5).Value);
+            Assert.Same(exception, Result.Try<int>(() => throw exception).Error);
+        }
     }
 }
