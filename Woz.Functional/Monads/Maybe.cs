@@ -5,36 +5,37 @@ using static Woz.Functional.FreeFunctions;
 
 namespace Woz.Functional.Monads
 {
-    public struct Maybe<T> 
+    public abstract class Maybe<T> 
     {
-        private readonly (T, bool) _contents;
+        public static Maybe<T> Some(T value) => new MaybeSome(value);
+        public static Maybe<T> None => new MaybeNone();
 
-        public static implicit operator Maybe<T>(T value) => value.ToMaybe();
+        public abstract bool HasValue { get; }
 
-        public static Maybe<T> None => new Maybe<T>((default(T), false));
+        public abstract T Value { get; }
 
-        internal Maybe((T, bool) contents) => _contents = contents;
-
-        public bool HasValue => _contents.Item2;
-
-        public T Value
+        internal class MaybeSome : Maybe<T>
         {
-            get
-            {
-                if (!HasValue)
-                {
-                    throw new InvalidOperationException(
-                        $"{nameof(Maybe<T>)} does not have a value.");
-                }
-                return _contents.Item1;
-            }
+            internal MaybeSome(T value) => Value = value;
+
+            public override bool HasValue => true;
+
+            public override T Value { get; }
+        }
+
+        internal class MaybeNone : Maybe<T>
+        {
+            public override bool HasValue => false;
+
+            public override T Value => 
+                throw new InvalidOperationException($"{nameof(MaybeNone)} does not have a value.");
         }
     }
 
     public static class Maybe 
     {
         #region Construction
-        public static Maybe<T> ToSome<T>(this T value) => new Maybe<T>((value, true));
+        public static Maybe<T> ToSome<T>(this T value) => Maybe<T>.Some(value);
         public static Maybe<T> ToMaybe<T>(this T value) => value != null ? value.ToSome() : Maybe<T>.None;
         #endregion
 

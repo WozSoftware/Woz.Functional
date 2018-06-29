@@ -16,16 +16,6 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
-        public void ImplicitConstruction()
-        {
-            Maybe<int> some = 5;
-            Assert.Equal(5, some.Value);
-
-            Maybe<string> none = null;
-            Assert.False(none.HasValue);
-        }
-
-        [Fact]
         public void SomeState()
         {
             var maybe = 5.ToSome();
