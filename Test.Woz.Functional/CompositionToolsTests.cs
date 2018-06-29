@@ -9,7 +9,6 @@ namespace Test.Woz.Functional
         // NOTE: These feel long winded but they ensure the functions are pulled apart
         // and put together correctly
 
-        #region Func Curreny and DeCurry Tests
         private readonly Func<int, int, bool> _func2Args =
             (a, b) => a == 1 && b == 2;
 
@@ -22,6 +21,93 @@ namespace Test.Woz.Functional
         private readonly Func<int, int, int, int, int, bool> _func5Args =
             (a, b, c, d, e) => a == 1 && b == 2 && c == 3 && d == 4 && e == 5;
 
+        private readonly Func<(Action<int, int>, Func<bool>)> _action2Args =
+            () =>
+            {
+                var called = false;
+                return ((a, b) => called = a == 1 && b == 2, () => called);
+            };
+
+        private readonly Func<(Action<int, int, int>, Func<bool>)> _action3Args =
+            () =>
+            {
+                var called = false;
+                return ((a, b, c) => called = a == 1 && b == 2 && c == 3, () => called);
+            };
+
+        private readonly Func<(Action<int, int, int, int>, Func<bool>)> _action4Args =
+            () =>
+            {
+                var called = false;
+                return ((a, b, c, d) => called = a == 1 && b == 2 && c == 3 && d == 4, () => called);
+            };
+
+        private readonly Func<(Action<int, int, int, int, int>, Func<bool>)> _action5Args =
+            () =>
+            {
+                var called = false;
+                return ((a, b, c, d, e) => called = a == 1 && b == 2 && c == 3 && d == 4 && e == 5, () => called);
+            };
+
+        #region Compose Into Func Tests
+        [Fact]
+        public void IntoFunc()
+        {
+            bool not(bool x) => !x;
+
+            Assert.False(_func2Args.Into(not)(1, 2));
+            Assert.True(_func2Args.Into(not)(11, 22));
+
+            Assert.False(_func3Args.Into(not)(1, 2, 3));
+            Assert.True(_func3Args.Into(not)(11, 22, 33));
+
+            Assert.False(_func4Args.Into(not)(1, 2, 3, 4));
+            Assert.True(_func4Args.Into(not)(11, 22, 33, 44));
+
+            Assert.False(_func5Args.Into(not)(1, 2, 3, 4, 5));
+            Assert.True(_func5Args.Into(not)(11, 22, 33, 44, 55));
+        }
+        #endregion
+
+
+        #region Compose Into Func Tests
+        [Fact]
+        public void IntoAction()
+        {
+            void canThrow(bool x)
+            {
+                if (x)
+                {
+                    throw new Exception();
+                }
+            }
+
+            Assert.Throws<Exception>(() => _func2Args.Into(canThrow)(1, 2));
+            _func2Args.Into(canThrow)(11, 22);
+
+            Assert.Throws<Exception>(() => _func3Args.Into(canThrow)(1, 2, 3));
+            _func3Args.Into(canThrow)(11, 22, 33);
+
+            Assert.Throws<Exception>(() => _func4Args.Into(canThrow)(1, 2, 3, 4));
+            _func4Args.Into(canThrow)(11, 22, 33, 44);
+
+            Assert.Throws<Exception>(() => _func5Args.Into(canThrow)(1, 2, 3, 4, 5));
+            _func5Args.Into(canThrow)(11, 22, 33, 44, 55);
+        }
+        #endregion
+
+        #region #region Reverse Args
+        [Fact]
+        public void ReverseArgs()
+        {
+            Assert.True(_func2Args.ReverseArgs()(2, 1));
+            Assert.True(_func3Args.ReverseArgs()(3, 2, 1));
+            Assert.True(_func4Args.ReverseArgs()(4, 3, 2, 1));
+            Assert.True(_func5Args.ReverseArgs()(5, 4, 3, 2, 1));
+        }
+        #endregion
+
+        #region Func Curreny and DeCurry Tests
         [Fact]
         public void CurryFunc()
         {
@@ -56,34 +142,6 @@ namespace Test.Woz.Functional
         #endregion
 
         #region Action Curry and DeCurry Tests
-        private readonly Func<(Action<int, int>, Func<bool>)> _action2Args =
-            () =>
-            {
-                var called = false;
-                return ((a, b) => called = a == 1 && b == 2, () => called);
-            };
-
-        private readonly Func<(Action<int, int, int>, Func<bool>)> _action3Args =
-            () =>
-            {
-                var called = false;
-                return ((a, b, c) => called = a == 1 && b == 2 && c == 3, () => called);
-            };
-
-        private readonly Func<(Action<int, int, int, int>, Func<bool>)> _action4Args =
-            () =>
-            {
-                var called = false;
-                return ((a, b, c, d) => called = a == 1 && b == 2 && c == 3 && d == 4, () => called);
-            };
-
-        private readonly Func<(Action<int, int, int, int, int>, Func<bool>)> _action5Args =
-            () =>
-            {
-                var called = false;
-                return ((a, b, c, d, e) => called = a == 1 && b == 2 && c == 3 && d == 4 && e == 5, () => called);
-            };
-
         [Theory]
         [InlineData(1, 2, true)]
         [InlineData(11, 22, false)]
