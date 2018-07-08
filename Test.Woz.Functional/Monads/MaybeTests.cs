@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Woz.Functional.Monads;
 using Xunit;
 
@@ -139,6 +140,16 @@ namespace Test.Woz.Functional.Monads
         {
             Assert.Equal(5, 5.ToSome().Recover(() => 7).Value);
             Assert.Equal(7, Maybe<int>.None.Recover(() => 7).Value);
+        }
+
+        [Fact]
+        public void ToEnumerable()
+        {
+            var some = 5.ToSome().ToEnumerable();
+            Assert.Single(some);
+            Assert.Equal(5, some.First());
+
+            Assert.False(Maybe<int>.None.ToEnumerable().Any());
         }
 
         [Fact]

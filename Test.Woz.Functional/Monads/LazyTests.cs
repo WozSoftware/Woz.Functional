@@ -59,7 +59,5 @@ namespace Test.Woz.Functional.Monads
             Assert.Equal(5, result.Value);
             Assert.True(evaluated);
         }
-
-
     }
 }

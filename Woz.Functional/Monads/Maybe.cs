@@ -80,6 +80,14 @@ namespace Woz.Functional.Monads
         #endregion
 
         #region IEnumerable
+        public static IEnumerable<T> ToEnumerable<T>(this Maybe<T> maybe)
+        {
+            if (maybe.HasValue)
+            {
+                yield return maybe.Value;
+            }
+        }
+
         public static Maybe<T> MaybeMin<T>(this IEnumerable<T> enumerable)
             => enumerable.MaybeMin(Identity);
 
