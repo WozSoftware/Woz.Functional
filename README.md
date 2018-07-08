@@ -15,6 +15,7 @@ The current monads are:
 - Maybe = Value or None
 - Result = Value or Error
 - Lazy = Lazy composition
+- Task = async composition
 - State = Thread state
 
 Here is an example of adding two Maybe wrapped values, the query syntax maps 
