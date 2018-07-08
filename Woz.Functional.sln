@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Woz.Functional", "Woz.Functional\Woz.Functional.csproj", "{7DAA2C36-C285-424C-A2BC-1E1FF6A562CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Woz.Functional", "Test.Woz.Functional\Test.Woz.Functional.csproj", "{D413708E-9A6A-4F0E-910F-41614DA6A493}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Woz.Functional", "Test.Woz.Functional\Test.Woz.Functional.csproj", "{D413708E-9A6A-4F0E-910F-41614DA6A493}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

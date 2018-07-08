@@ -20,6 +20,10 @@
     <Authors>Woz</Authors>
 
     <PackageLicenseUrl>https://github.com/WozSoftware/Woz.Functional/blob/master/LICENSE</PackageLicenseUrl>
+
+    <AssemblyVersion>1.0.3.6763</AssemblyVersion>
+
+    <FileVersion>1.0.3.6763</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
