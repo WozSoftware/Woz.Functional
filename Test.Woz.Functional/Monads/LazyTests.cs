@@ -7,33 +7,28 @@ namespace Test.Woz.Functional.Monads
     public class LazyTests
     {
         [Fact]
-        public void SelectManySimple()
-        {
-            TestLazy<int>(
+        public void SelectManySimple() 
+            => TestLazy<int>(
                 makeLazy => makeLazy(5).SelectMany(value => makeLazy(value + 3)),
                 lazy => Assert.Equal(8, lazy.Value));
-        }
 
         [Fact]
-        public void SelectManyFull()
-        {
-            TestLazy<int>(
+        public void SelectManyFull() 
+            => TestLazy<int>(
                 makeLazy =>
                     from a in makeLazy(5)
                     from b in makeLazy(3)
                     select a + b,
                 lazy => Assert.Equal(8, lazy.Value));
-        }
 
         [Fact]
-        public void Select()
-        {
-            TestLazy<int>(
+        public void Select() 
+            => TestLazy<int>(
                 makeLazy => makeLazy(5).Select(x => x + 3),
                 lazy => Assert.Equal(8, lazy.Value));
-        }
 
-        private static void TestLazy<T>(Func<Func<T, Lazy<T>>, Lazy<T>> factory, Action<Lazy<T>> tester)
+        private static void TestLazy<T>(
+            Func<Func<T, Lazy<T>>, Lazy<T>> factory, Action<Lazy<T>> tester)
         {
             bool evaluated = false;
 

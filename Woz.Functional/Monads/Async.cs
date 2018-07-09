@@ -16,8 +16,8 @@ namespace Woz.Functional.Monads
             => await selector(await task);
 
         public static Task<TR> SelectMany<T1, T2, TR>(
-            this Task<T1> lazy, Func<T1, Task<T2>> selector, Func<T1, T2, TR> projection)
-            => lazy.SelectMany(
+            this Task<T1> task, Func<T1, Task<T2>> selector, Func<T1, T2, TR> projection)
+            => task.SelectMany(
                 value1 => selector(value1).SelectMany(value2 => projection(value1, value2).ToTask()));
 
         public static Task<TR> Select<T, TR>(this Task<T> task, Func<T, TR> selector)
