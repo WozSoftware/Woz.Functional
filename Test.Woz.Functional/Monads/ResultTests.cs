@@ -7,7 +7,7 @@ namespace Test.Woz.Functional.Monads
     public class ResultTests
     {
         private const string ErrorMessage = "Bang";
-        private readonly Result<int, string> ErrorResult = Result<int, string>.Raise(ErrorMessage);
+        private static readonly Result<int, string> ErrorResult = Result<int, string>.Raise(ErrorMessage);
 
         [Fact]
         public void ValueState()
@@ -21,7 +21,7 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void ErrorState()
         {
-            Assert.Equal("Bang", ErrorResult.Error);
+            Assert.Equal(ErrorMessage, ErrorResult.Error);
             Assert.False(ErrorResult.HasValue);
             Assert.Throws<InvalidOperationException>(() => ErrorResult.Value);
         }
@@ -73,6 +73,28 @@ namespace Test.Woz.Functional.Monads
             Assert.Equal(6, Result<int, string>.Create(5).Select(value => value + 1).Value);
             Assert.False(ErrorResult.Select(x => x + 1).HasValue);
         }
+
+        [Fact]
+        public void KleisliInto()
+        {
+            var result = Function1.Into(Function2);
+
+            Assert.Equal(6, result(5).Value);
+        }
+
+        [Fact]
+        public void KleisliIntoProjected()
+        {
+            var composed = Function1.Into(Function2, (a, b) => a + b);
+
+            Assert.Equal(11, composed(5).Value);
+        }
+
+        private static readonly Func<int, Result<decimal, string>> Function1 = 
+            value => Result<decimal, string>.Create(value);
+
+        private static readonly Func<decimal, Result<int, string>> Function2 = 
+            value => Result<int, string>.Create(((int)value) + 1);
 
         [Fact]
         public void Try()

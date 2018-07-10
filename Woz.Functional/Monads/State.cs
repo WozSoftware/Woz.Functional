@@ -20,7 +20,9 @@ namespace Woz.Functional.Monads
             };
 
         public static State<TS, TR> SelectMany<TS, T1, T2, TR>(
-            this State<TS, T1> source, Func<T1, State<TS, T2>> selector, Func<T1, T2, TR> projection)
+            this State<TS, T1> source, 
+            Func<T1, State<TS, T2>> selector, 
+            Func<T1, T2, TR> projection)
             => source.SelectMany(
                 value1 => selector(value1).SelectMany<TS, T2, TR>(
                     value2 => state => (state, projection(value1, value2))));
@@ -29,5 +31,16 @@ namespace Woz.Functional.Monads
             this State<TS, T> source, Func<T, TR> selector)
             => source.SelectMany<TS, T, TR>(value => state => (state, selector(value)));
         #endregion
+
+        #region Kleisli
+        public static Func<T1, State<TS, TR>> Into<TS, T1, T2, TR>(
+            this Func<T1, State<TS, T2>> f, Func<T2, State<TS, TR>> g)
+            => value => f(value).SelectMany(g);
+
+        public static Func<T1, State<TS, TR>> Into<TS, T1, T2, T3, TR>(
+            this Func<T1, State<TS, T2>> f, Func<T2, State<TS, T3>> g, Func<T2, T3, TR> projection)
+            => value => f(value).SelectMany(g, projection);
+        #endregion
+
     }
 }

@@ -80,6 +80,25 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void KleisliInto()
+        {
+            var composed = Function1.Into(Function2);
+
+            Assert.Equal(6, composed(5).Value);
+        }
+
+        [Fact]
+        public void KleisliSelectManyFull()
+        {
+            var composed = Function1.Into(Function2, (a, b) => a + b);
+
+            Assert.Equal(11, composed(5).Value);
+        }
+
+        private static readonly Func<int, Maybe<decimal>> Function1 = value => ((decimal)value).ToSome();
+        private static readonly Func<decimal, Maybe<int>> Function2 = value => (((int)value) + 1).ToSome();
+
+        [Fact]
         public void Where()
         {
             Assert.Equal(5, 5.ToSome().Where(_ => true).Value);

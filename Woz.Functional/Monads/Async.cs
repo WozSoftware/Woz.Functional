@@ -24,6 +24,16 @@ namespace Woz.Functional.Monads
             => task.SelectMany(value => selector(value).ToTask());
         #endregion
 
+        #region Kleisli
+        public static Func<T1, Task<TR>> Into<T1, T2, TR>(
+            this Func<T1, Task<T2>> f, Func<T2, Task<TR>> g)
+            => value => f(value).SelectMany(g);
+
+        public static Func<T1, Task<TR>> Into<T1, T2, T3, TR>(
+            this Func<T1, Task<T2>> f, Func<T2, Task<T3>> g, Func<T2, T3, TR> projection)
+            => value => f(value).SelectMany(g, projection);
+        #endregion
+
         #region Utility
         public static Task<T> Flattern<T>(this Task<Task<T>> taskTask) => taskTask.SelectMany(Identity);
         #endregion

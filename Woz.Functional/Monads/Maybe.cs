@@ -55,6 +55,16 @@ namespace Woz.Functional.Monads
             => maybe.SelectMany(value => predicate(value) ? value.ToSome() : Maybe<T>.None);
         #endregion
 
+        #region Kleisli
+        public static Func<T1, Maybe<TR>> Into<T1, T2, TR>(
+            this Func<T1, Maybe<T2>> f, Func<T2, Maybe<TR>> g)
+            => value => f(value).SelectMany(g);
+
+        public static Func<T1, Maybe<TR>> Into<T1, T2, T3, TR>(
+            this Func<T1, Maybe<T2>> f, Func<T2, Maybe<T3>> g, Func<T2, T3, TR> projection)
+            => value => f(value).SelectMany(g, projection);
+        #endregion
+
         #region Utility
         public static Maybe<T> Flattern<T>(this Maybe<Maybe<T>> maybeMaybe) => maybeMaybe.SelectMany(Identity);
 

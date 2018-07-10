@@ -42,6 +42,25 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void KleisliInto()
+        {
+            var composed = Function1.Into(Function2);
+
+            Assert.Equal(6, composed(5).Value);
+        }
+
+        [Fact]
+        public void KleisliSelectManyFull()
+        {
+            var composed = Function1.Into(Function2, (a, b) => a + b);
+
+            Assert.Equal(11, composed(5).Value);
+        }
+
+        private static readonly Func<int, Lazy<decimal>> Function1 = value => ((decimal)value).ToLazy();
+        private static readonly Func<decimal, Lazy<int>> Function2 = value => (((int)value) + 1).ToLazy();
+
+        [Fact]
         public void Flattern()
         {
             bool evaluated = false;

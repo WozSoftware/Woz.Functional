@@ -43,6 +43,25 @@ namespace Test.Woz.Functional.Monads
                 });
 
         [Fact]
+        public void KleisliInto()
+        {
+            var composed = Function1.Into(Function2);
+
+            Assert.Equal(6, composed(5).Result);
+        }
+
+        [Fact]
+        public void KleisliIntoProjected()
+        {
+            var composed = Function1.Into(Function2, (a, b) => a + b);
+
+            Assert.Equal(11, composed(5).Result);
+        }
+
+        public static readonly Func<int, Task<decimal>> Function1 = value => ((decimal)value).ToTask();
+        public static readonly Func<decimal, Task<int>> Function2 = value => (((int)value) + 1).ToTask();
+
+        [Fact]
         public void Flattern()
         {
             var task = MakeTask(MakeTask(5)).Flattern();

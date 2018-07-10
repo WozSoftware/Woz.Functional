@@ -56,6 +56,16 @@ namespace Woz.Functional.Monads
             => result.SelectMany(x => Result<TR, TE>.Create(selector(x)));
         #endregion
 
+        #region Kleisli
+        public static Func<T1, Result<TR, TE>> Into<T1, T2, TR, TE>(
+            this Func<T1, Result<T2, TE>> f, Func<T2, Result<TR, TE>> g)
+            => value => f(value).SelectMany(g);
+
+        public static Func<T1, Result<TR, TE>> Into<T1, T2, T3, TR, TE>(
+            this Func<T1, Result<T2, TE>> f, Func<T2, Result<T3, TE>> g, Func<T2, T3, TR> projection)
+            => value => f(value).SelectMany(g, projection);
+        #endregion
+
         #region Exception Wrapping
         public static Result<T, Exception> Try<T>(Func<T> task)
         {
