@@ -9,12 +9,14 @@ namespace Woz.Functional.Monads
         public static Result<T, TE> Create(T value) => new ResultValue(value);
         public static Result<T, TE> Raise(TE error) => new ResultError(error);
 
+        private Result() { } // Hide
+
         public abstract bool HasValue { get; }
 
         public abstract T Value { get; }
         public abstract TE Error { get; }
 
-        internal class ResultValue : Result<T, TE>
+        internal sealed class ResultValue : Result<T, TE>
         {
             internal ResultValue(T value) => Value = value;
 
@@ -26,7 +28,7 @@ namespace Woz.Functional.Monads
                 => throw new InvalidOperationException($"{nameof(Result<T, TE>)} does not have an error.");
         }
 
-        internal class ResultError : Result<T, TE>
+        internal sealed class ResultError : Result<T, TE>
         {
             internal ResultError(TE error) => Error = error;
 

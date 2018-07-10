@@ -10,11 +10,13 @@ namespace Woz.Functional.Monads
         public static Maybe<T> Some(T value) => new MaybeSome(value);
         public static Maybe<T> None => new MaybeNone();
 
+        private Maybe() { } // Hide
+
         public abstract bool HasValue { get; }
 
         public abstract T Value { get; }
 
-        internal class MaybeSome : Maybe<T>
+        internal sealed class MaybeSome : Maybe<T>
         {
             internal MaybeSome(T value) => Value = value;
 
@@ -23,7 +25,7 @@ namespace Woz.Functional.Monads
             public override T Value { get; }
         }
 
-        internal class MaybeNone : Maybe<T>
+        internal sealed class MaybeNone : Maybe<T>
         {
             public override bool HasValue => false;
 

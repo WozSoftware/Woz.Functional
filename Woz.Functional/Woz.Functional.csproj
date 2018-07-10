@@ -11,8 +11,8 @@
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl>https://github.com/WozSoftware/Woz.Functional/blob/master/LICENSE</PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.20.6765</AssemblyVersion>
-    <FileVersion>1.0.20.6765</FileVersion>
+    <AssemblyVersion>1.0.21.6765</AssemblyVersion>
+    <FileVersion>1.0.21.6765</FileVersion>
     <Version>1.0.7</Version>
     <PackageTags>C#, functional, monads, composition, curry</PackageTags>
   </PropertyGroup>
