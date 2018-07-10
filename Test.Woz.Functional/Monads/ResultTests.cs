@@ -75,20 +75,10 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
-        public void KleisliInto()
-        {
-            var result = Function1.Into(Function2);
-
-            Assert.Equal(6, result(5).Value);
-        }
+        public void KleisliInto() => Assert.Equal(6, Function1.Into(Function2)(5).Value);
 
         [Fact]
-        public void KleisliIntoProjected()
-        {
-            var composed = Function1.Into(Function2, (a, b) => a + b);
-
-            Assert.Equal(11, composed(5).Value);
-        }
+        public void KleisliIntoProjected() => Assert.Equal(11, Function1.Into(Function2, (a, b) => a + b)(5).Value);
 
         private static readonly Func<int, Result<decimal, string>> Function1 = 
             value => Result<decimal, string>.Create(value);

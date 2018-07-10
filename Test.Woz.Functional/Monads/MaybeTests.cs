@@ -8,6 +8,8 @@ namespace Test.Woz.Functional.Monads
 {
     public class MaybeTests
     {
+        private static readonly Maybe<int> Some5 = 5.ToSome();
+
         [Fact]
         public void Construction()
         {
@@ -19,9 +21,8 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void SomeState()
         {
-            var maybe = 5.ToSome();
-            Assert.Equal(5, maybe.Value);
-            Assert.True(maybe.HasValue);
+            Assert.Equal(5, Some5.Value);
+            Assert.True(Some5.HasValue);
         }
 
         [Fact]
@@ -34,7 +35,7 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void SelectManySimple()
         {
-            var result = 5.ToSome().SelectMany(value => (value + 3).ToSome());
+            var result = Some5.SelectMany(value => (value + 3).ToSome());
 
             Assert.Equal(8, result.Value);
         }
@@ -43,7 +44,7 @@ namespace Test.Woz.Functional.Monads
         public void SelectManyBothSome()
         {
             var result =
-                from a in 5.ToSome()
+                from a in Some5
                 from b in 3.ToSome()
                 select a + b;
 
@@ -75,25 +76,15 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void Select()
         {
-            Assert.Equal(6, 5.ToSome().Select(x => x + 1).Value);
+            Assert.Equal(6, Some5.Select(x => x + 1).Value);
             Assert.False(Maybe<int>.None.Select(x => x + 1).HasValue);
         }
 
         [Fact]
-        public void KleisliInto()
-        {
-            var composed = Function1.Into(Function2);
-
-            Assert.Equal(6, composed(5).Value);
-        }
+        public void KleisliInto() => Assert.Equal(6, Function1.Into(Function2)(5).Value);
 
         [Fact]
-        public void KleisliSelectManyFull()
-        {
-            var composed = Function1.Into(Function2, (a, b) => a + b);
-
-            Assert.Equal(11, composed(5).Value);
-        }
+        public void KleisliSelectManyFull() => Assert.Equal(11, Function1.Into(Function2, (a, b) => a + b)(5).Value);
 
         private static readonly Func<int, Maybe<decimal>> Function1 = value => ((decimal)value).ToSome();
         private static readonly Func<decimal, Maybe<int>> Function2 = value => (((int)value) + 1).ToSome();
@@ -101,8 +92,8 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void Where()
         {
-            Assert.Equal(5, 5.ToSome().Where(_ => true).Value);
-            Assert.False(5.ToSome().Where(_ => false).HasValue);
+            Assert.Equal(5, Some5.Where(_ => true).Value);
+            Assert.False(Some5.Where(_ => false).HasValue);
             Assert.False(Maybe<int>.None.Where(_ => true).HasValue);
             Assert.False(Maybe<int>.None.Where(_ => false).HasValue);
         }
@@ -110,8 +101,8 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void Flattern()
         {
-            Assert.Equal(5, 5.ToSome().ToSome().Flattern().Value);
-            Assert.False(5.ToSome().Where(_ => false).HasValue);
+            Assert.Equal(5, Some5.ToSome().Flattern().Value);
+            Assert.False(Some5.Where(_ => false).HasValue);
             Assert.False(Maybe<int>.None.Where(_ => true).HasValue);
             Assert.False(Maybe<int>.None.Where(_ => false).HasValue);
         }
@@ -123,7 +114,7 @@ namespace Test.Woz.Functional.Monads
             string someFunc(int x) => x.ToString();
             string noneFunc() => failed;
 
-            Assert.Equal("5", 5.ToSome().Match(someFunc, noneFunc));
+            Assert.Equal("5", Some5.Match(someFunc, noneFunc));
             Assert.Equal(failed, Maybe<int>.None.Match(someFunc, noneFunc));
         }
 
@@ -133,7 +124,7 @@ namespace Test.Woz.Functional.Monads
             Maybe<string> someFunc(int x) => x.ToString().ToSome();
             Maybe<string> noneFunc() => Maybe<string>.None;
 
-            Assert.Equal("5", 5.ToSome().Match(someFunc, noneFunc).Value);
+            Assert.Equal("5", Some5.Match(someFunc, noneFunc).Value);
             Assert.False(Maybe<int>.None.Match(someFunc, noneFunc).HasValue);
         }
 
@@ -141,7 +132,7 @@ namespace Test.Woz.Functional.Monads
         public void Tee()
         {
             var value = 0;
-            Assert.Equal(5, 5.ToSome().Tee(x => value = x).Value);
+            Assert.Equal(5, Some5.Tee(x => value = x).Value);
             Assert.Equal(5, value);
 
             Assert.False(Maybe<int>.None.Tee(x => { throw new Exception(); }).HasValue);
@@ -150,21 +141,21 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void RecoverValue()
         {
-            Assert.Equal(5, 5.ToSome().Recover(7).Value);
+            Assert.Equal(5, Some5.Recover(7).Value);
             Assert.Equal(7, Maybe<int>.None.Recover(7).Value);
         }
 
         [Fact]
         public void RecoverValueFactory()
         {
-            Assert.Equal(5, 5.ToSome().Recover(() => 7).Value);
+            Assert.Equal(5, Some5.Recover(() => 7).Value);
             Assert.Equal(7, Maybe<int>.None.Recover(() => 7).Value);
         }
 
         [Fact]
         public void ToEnumerable()
         {
-            var some = 5.ToSome().ToEnumerable();
+            var some = Some5.ToEnumerable();
             Assert.Single(some);
             Assert.Equal(5, some.First());
 

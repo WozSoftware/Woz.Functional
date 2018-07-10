@@ -13,7 +13,6 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void Construction()
         {
-
             var state = value.ToState<string, int>();
             var result = state(stateInstance);
 
