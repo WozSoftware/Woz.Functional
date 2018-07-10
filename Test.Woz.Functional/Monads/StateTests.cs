@@ -1,5 +1,6 @@
 ﻿using System;
 using Woz.Functional.Monads;
+using static Woz.Functional.Monads.State;
 using Xunit;
 
 namespace Test.Woz.Functional.Monads
@@ -72,6 +73,14 @@ namespace Test.Woz.Functional.Monads
             Assert.Equal(stateInstance, result.Item1);
             Assert.Equal(value + (value + 1), result.Item2);
         }
+
+        [Fact]
+        public void GetState() 
+            => Assert.Equal(stateInstance, Function1(5).SelectMany(_ => GetState<string>())(stateInstance).Item2);
+
+        [Fact]
+        public void SetState() 
+            => Assert.Equal("New", Function1(5).SelectMany(_ => SetState<string>("New"))(stateInstance).Item1);
 
         private static readonly Func<int, State<string, int>> Function1 = 
             value => value.ToState<string, int>();

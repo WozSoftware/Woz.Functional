@@ -4,7 +4,7 @@ namespace Woz.Functional.Monads
 {
     public delegate (TS, TV) State<TS, TV>(TS state);
 
-    public static class StateExtensions
+    public static class State
     {
         #region Construction
         public static State<TS, TV> ToState<TS, TV>(this TV value) => state => (state, value);
@@ -42,5 +42,10 @@ namespace Woz.Functional.Monads
             => value => f(value).SelectMany(g, projection);
         #endregion
 
+        #region State Manipulation
+        public static State<TS, TS> GetState<TS>() => state => (state, state);
+
+        public static State<TS, Unit> SetState<TS>(TS newState) => state => (newState, Unit.Value);
+        #endregion
     }
 }
