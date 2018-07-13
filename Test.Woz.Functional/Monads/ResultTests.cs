@@ -87,6 +87,27 @@ namespace Test.Woz.Functional.Monads
             value => Result<int, string>.Create(((int)value) + 1);
 
         [Fact]
+        public void Lift()
+        {
+            Func<int, string> func = value => value.ToString();
+            var liftedFunc = Result.Lift<int, string, string>(func);
+            Assert.Equal("5", liftedFunc(Result<int, string>.Create(5)).Value);
+            Assert.False(liftedFunc(ErrorResult).HasValue);
+        }
+
+        [Fact]
+        public void Flattern()
+        {
+            // generic vomit :)
+            var resultResult = Result<Result<int, string>, string>.Create(Result<int, string>.Create(5));
+            var ErrorResult = Result<Result<int, string>, string>.Raise("Bang");
+
+            Assert.Equal(5, resultResult.Flattern().Value);
+            Assert.False(ErrorResult.Flattern().HasValue);
+
+        }
+
+        [Fact]
         public void Try()
         {
             var exception = new Exception("Bang");

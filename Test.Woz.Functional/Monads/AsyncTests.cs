@@ -62,12 +62,13 @@ namespace Test.Woz.Functional.Monads
         public static readonly Func<decimal, Task<int>> Function2 = value => (((int)value) + 1).ToTask();
 
         [Fact]
-        public void Flattern()
+        public void Lift()
         {
-            var task = MakeTask(MakeTask(5)).Flattern();
-
-            task.Wait();
-            Assert.Equal(5, task.Result);
+            Func<int, string> func = value => value.ToString();
+            Assert.Equal("5", Async.Lift(func)(5.ToTask()).Result);
         }
+
+        [Fact]
+        public void Flattern() => Assert.Equal(5, MakeTask(MakeTask(5)).Flattern().Result);
     }
 }

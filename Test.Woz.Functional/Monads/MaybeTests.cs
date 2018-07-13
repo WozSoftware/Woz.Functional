@@ -99,6 +99,15 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void Lift()
+        {
+            Func<int, string> func = value => value.ToString();
+            var liftedFunc = Maybe.Lift(func);
+            Assert.Equal("5", liftedFunc(Some5).Value);
+            Assert.False(liftedFunc(Maybe<int>.None).HasValue);
+        }
+
+        [Fact]
         public void Flattern()
         {
             Assert.Equal(5, Some5.ToSome().Flattern().Value);

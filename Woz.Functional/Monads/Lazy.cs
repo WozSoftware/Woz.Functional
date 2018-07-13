@@ -34,6 +34,9 @@ namespace Woz.Functional.Monads
         #endregion
 
         #region Utility
+        public static Func<Lazy<T>, Lazy<TR>> Lift<T, TR>(Func<T, TR> function)
+            => lazy => lazy.Select(function);
+
         public static Lazy<T> Flattern<T>(this Lazy<Lazy<T>> lazyLazy) => lazyLazy.SelectMany(Identity);
         #endregion
     }

@@ -35,6 +35,9 @@ namespace Woz.Functional.Monads
         #endregion
 
         #region Utility
+        public static Func<Task<T>, Task<TR>> Lift<T, TR>(Func<T, TR> function)
+            => task => task.Select(function);
+
         public static Task<T> Flattern<T>(this Task<Task<T>> taskTask) => taskTask.SelectMany(Identity);
         #endregion
     }

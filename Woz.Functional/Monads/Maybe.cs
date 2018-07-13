@@ -68,6 +68,9 @@ namespace Woz.Functional.Monads
         #endregion
 
         #region Utility
+        public static Func<Maybe<T>, Maybe<TR>> Lift<T, TR>(this Func<T, TR> function)
+            => task => task.Select(function);
+
         public static Maybe<T> Flattern<T>(this Maybe<Maybe<T>> maybeMaybe) => maybeMaybe.SelectMany(Identity);
 
         public static TR Match<T, TR>(this Maybe<T> maybe, Func<T, TR> someFunc, Func<TR> noneFunc)

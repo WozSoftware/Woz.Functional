@@ -75,6 +75,30 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void Lift()
+        {
+            Func<int, string> func = value => value.ToString();
+            var result = State.Lift<string, int, string>(func)(5.ToState<string, int>())(stateInstance);
+
+            Assert.Equal(stateInstance, result.Item1);
+            Assert.Equal("5", result.Item2);
+        }
+
+        [Fact]
+        public void Flattern()
+        {
+            bool evaluated = false;
+
+            var result = new Lazy<Lazy<int>>(
+                () => new Lazy<int>(() => { evaluated = true; return 5; }))
+                .Flattern();
+
+            Assert.False(evaluated);
+            Assert.Equal(5, result.Value);
+            Assert.True(evaluated);
+        }
+
+        [Fact]
         public void GetState() 
             => Assert.Equal(stateInstance, Function1(5).SelectMany(_ => GetState<string>())(stateInstance).Item2);
 

@@ -51,6 +51,13 @@ namespace Test.Woz.Functional.Monads
         private static readonly Func<decimal, Lazy<int>> Function2 = value => (((int)value) + 1).ToLazy();
 
         [Fact]
+        public void Lift()
+        {
+            Func<int, string> func = value => value.ToString();
+            Assert.Equal("5", Lazy.Lift(func)(5.ToLazy()).Value);
+        }
+
+        [Fact]
         public void Flattern()
         {
             bool evaluated = false;

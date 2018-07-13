@@ -27,18 +27,27 @@ namespace Test.Woz.Functional.Monads
         public void Select() => Assert.Equal(6, Get5IO.Select(x => x + 1)());
 
         [Fact]
-        public void Run()
-        {
-            Assert.Equal(5, Get5IO.Run().Value);
-            Assert.Equal("Bang", BangIO.Run().Error.Message);
-        }
-
-        [Fact]
         public void KleisliInto() => Assert.Equal(7, Increment.Into(Increment)(5)());
 
         [Fact]
         public void KleisliSelectManyFull() => Assert.Equal(13, Increment.Into(Increment, (a, b) => a + b)(5)());
 
+        [Fact]
+        public void Lift()
+        {
+            Func<int, string> func = value => value.ToString();
+            Assert.Equal("5", IO.Lift(func)(Get5IO).Run().Value);
+        }
+
+        [Fact]
+        public void Flattern() => Assert.Equal(5, new IO<IO<int>>(() => Get5IO).Flattern().Run().Value);
+
+        [Fact]
+        public void Run()
+        {
+            Assert.Equal(5, Get5IO.Run().Value);
+            Assert.Equal("Bang", BangIO.Run().Error.Message);
+        }
 
         private static Func<int, IO<int>> Increment = value => () => value + 1;
 

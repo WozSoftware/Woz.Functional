@@ -1,4 +1,5 @@
 ﻿using System;
+using static Woz.Functional.FreeFunctions;
 
 namespace Woz.Functional.Monads
 {
@@ -31,6 +32,13 @@ namespace Woz.Functional.Monads
         public static Func<T1, IO<TR>> Into<T1, T2, T3, TR>(
             this Func<T1, IO<T2>> f, Func<T2, IO<T3>> g, Func<T2, T3, TR> projection)
             => value => f(value).SelectMany(g, projection);
+        #endregion
+
+        #region Utility
+        public static Func<IO<T>, IO<TR>> Lift<T, TR>(Func<T, TR> function)
+            => io => io.Select(function);
+
+        public static IO<T> Flattern<T>(this IO<IO<T>> ioIo) => ioIo.SelectMany(Identity);
         #endregion
 
         #region Exception Wrapping
