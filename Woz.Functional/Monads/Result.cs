@@ -5,8 +5,6 @@ namespace Woz.Functional.Monads
 {
     public abstract class Result<T, TE>
     {
-        public static implicit operator Result<T, TE>(T value) => new ResultValue(value);
-
         public static Result<T, TE> Create(T value) => new ResultValue(value);
         public static Result<T, TE> Raise(TE error) => new ResultError(error);
 
