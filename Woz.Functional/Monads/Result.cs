@@ -73,6 +73,26 @@ namespace Woz.Functional.Monads
 
         public static Result<T, TE> Flattern<T, TE>(this Result<Result<T, TE>, TE> resultResult) 
             => resultResult.SelectMany(Identity);
+
+        public static TR Match<T, TR, TE>(this Result<T, TE> result, Func<T, TR> someFunc, Func<TR> noneFunc)
+            => result.HasValue ? someFunc(result.Value) : noneFunc();
+
+        public static Result<T, TE> Tee<T, TE>(this Result<T, TE> result, Action<T> action)
+        {
+            if (result.HasValue)
+            {
+                action(result.Value);
+            }
+            return result;
+        }
+        #endregion
+
+        #region Recovery
+        public static Result<T, TE> Recover<T, TE>(this Result<T, TE> result, T defaultValue)
+            => result.Recover(() => defaultValue);
+
+        public static Result<T, TE> Recover<T, TE>(this Result<T, TE> result, Func<T> defaultFactory)
+            => result.HasValue ? result : Result<T, TE>.Create(defaultFactory());
         #endregion
 
         #region Exception Wrapping

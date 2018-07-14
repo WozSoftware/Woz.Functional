@@ -115,5 +115,37 @@ namespace Test.Woz.Functional.Monads
             Assert.Equal(5, Result.Try(() => 5).Value);
             Assert.Same(exception, Result.Try<int>(() => throw exception).Error);
         }
+
+        [Fact]
+        public void MatchMatchStyle()
+        {
+            const string failed = "failed";
+            string someFunc(int x) => x.ToString();
+            string noneFunc() => failed;
+
+            Assert.Equal("5", Result<int, string>.Create(5).Match(someFunc, noneFunc));
+            Assert.Equal(failed, ErrorResult.Match(someFunc, noneFunc));
+        }
+
+        [Fact]
+        public void MatchBindStyle()
+        {
+            Result<string, string> someFunc(int x) => Result<string, string>.Create(x.ToString());
+            Result<string, string> noneFunc() => Result<string, string>.Raise("Bang");
+
+            Assert.Equal("5", Result<int, string>.Create(5).Match(someFunc, noneFunc).Value);
+            Assert.False(ErrorResult.Match(someFunc, noneFunc).HasValue);
+        }
+
+        [Fact]
+        public void Tee()
+        {
+            var value = 0;
+            Assert.Equal(5, Result<int, string>.Create(5).Tee(x => value = x).Value);
+            Assert.Equal(5, value);
+
+            Assert.False(ErrorResult.Tee(x => { throw new Exception(); }).HasValue);
+        }
+
     }
 }
