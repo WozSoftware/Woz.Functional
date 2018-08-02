@@ -9,6 +9,7 @@ namespace Woz.Functional.Monads
     {
         #region Construction
         public static IO<T> ToIO<T>(this Func<T> func) => new IO<T>(func);
+        public static IO<Func<T, TR>> ToIO<T, TR>(this Func<T, TR> func) => new IO<Func<T, TR>>(() => func);
         #endregion
 
         #region LINQ=Map/Flatmap
@@ -37,6 +38,11 @@ namespace Woz.Functional.Monads
         #region Utility
         public static Func<IO<T>, IO<TR>> Lift<T, TR>(Func<T, TR> function)
             => io => io.Select(function);
+
+        public static IO<TR> Apply<T, TR>(this IO<T> io, IO<Func<T, TR>> ioFunc)
+            => from value in io
+               from function in ioFunc
+               select function(value);
 
         public static IO<T> Flattern<T>(this IO<IO<T>> ioIo) => ioIo.SelectMany(Identity);
         #endregion

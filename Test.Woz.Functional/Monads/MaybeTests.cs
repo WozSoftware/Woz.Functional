@@ -108,6 +108,13 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void Apply()
+        {
+            Func<int, string> func = value => value.ToString();
+            Assert.Equal("5", Some5.Apply(func.ToSome()).Value);
+        }
+
+        [Fact]
         public void Flattern()
         {
             Assert.Equal(5, Some5.ToSome().Flattern().Value);

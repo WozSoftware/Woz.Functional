@@ -50,8 +50,7 @@ namespace Woz.Functional.Monads
         public static Result<TR, TE> SelectMany<T1, T2, TR, TE>(
             this Result<T1, TE> result, Func<T1, Result<T2, TE>> selector, Func<T1, T2, TR> projection)
             => result.SelectMany(
-                value1 => selector(value1).SelectMany(
-                    value2 => Result<TR, TE>.Create(projection(value1, value2))));
+                value1 => selector(value1).Select(value2 => projection(value1, value2)));
 
         public static Result<TR, TE> Select<T, TR, TE>(this Result<T, TE> result, Func<T, TR> selector)
             => result.SelectMany(x => Result<TR, TE>.Create(selector(x)));
@@ -69,7 +68,13 @@ namespace Woz.Functional.Monads
 
         #region Utility
         public static Func<Result<T, TE>, Result<TR, TE>> Lift<T, TR, TE>(Func<T, TR> function)
-            => task => task.Select(function);
+            => result => result.Select(function);
+
+        public static Result<TR, TE> Apply<T, TR, TE>(
+            this Result<T, TE> result, Result<Func<T, TR>, TE> resultFunction)
+            => from value in result
+               from function in resultFunction
+               select function(value);
 
         public static Result<T, TE> Flattern<T, TE>(this Result<Result<T, TE>, TE> resultResult) 
             => resultResult.SelectMany(Identity);

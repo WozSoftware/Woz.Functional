@@ -8,6 +8,7 @@ namespace Woz.Functional.Monads
         #region Construction
         public static Lazy<T> ToLazy<T>(this T value) => new Lazy<T>(() => value);
         public static Lazy<T> ToLazy<T>(this Func<T> factory) => new Lazy<T>(factory);
+        public static Lazy<Func<T, TR>> ToLazy<T, TR>(this Func<T, TR> func) => new Lazy<Func<T, TR>>(() => func);
         #endregion
 
         #region LINQ=Map/Flatmap
@@ -36,6 +37,11 @@ namespace Woz.Functional.Monads
         #region Utility
         public static Func<Lazy<T>, Lazy<TR>> Lift<T, TR>(Func<T, TR> function)
             => lazy => lazy.Select(function);
+
+        public static Lazy<TR> Apply<T, TR>(this Lazy<T> lazy, Lazy<Func<T, TR>> lazyFunction)
+            => from value in lazy
+               from function in lazyFunction
+               select function(value);
 
         public static Lazy<T> Flattern<T>(this Lazy<Lazy<T>> lazyLazy) => lazyLazy.SelectMany(Identity);
         #endregion

@@ -21,12 +21,11 @@ namespace Woz.Functional.Monads
             };
 
         public static State<TS, TR> SelectMany<TS, T1, T2, TR>(
-            this State<TS, T1> source, 
-            Func<T1, State<TS, T2>> selector, 
+            this State<TS, T1> source,
+            Func<T1, State<TS, T2>> selector,
             Func<T1, T2, TR> projection)
             => source.SelectMany(
-                value1 => selector(value1).SelectMany<TS, T2, TR>(
-                    value2 => state => (state, projection(value1, value2))));
+                value1 => selector(value1).Select(value2 => projection(value1, value2)));
 
         public static State<TS, TR> Select<TS, T, TR>(
             this State<TS, T> source, Func<T, TR> selector)
@@ -45,10 +44,15 @@ namespace Woz.Functional.Monads
 
         #region Utility
         public static Func<State<TS, T>, State<TS, TR>> Lift<TS, T, TR>(this Func<T, TR> function)
-            => task => task.Select(function);
+            => state => state.Select(function);
 
-        public static State<TS, T> Flattern<TS, T>(this State<TS, State<TS, T>> taskTask) 
-            => taskTask.SelectMany(Identity);
+        public static State<TS, TR> Apply<TS, T, TR>(this State<TS, T> source, State<TS, Func<T, TR>> stateFunction)
+            => from value in source
+               from function in stateFunction
+               select function(value);
+
+        public static State<TS, T> Flattern<TS, T>(this State<TS, State<TS, T>> sourceSource) 
+            => sourceSource.SelectMany(Identity);
         #endregion
 
         #region State Manipulation

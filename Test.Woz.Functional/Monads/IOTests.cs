@@ -43,6 +43,13 @@ namespace Test.Woz.Functional.Monads
         public void Flattern() => Assert.Equal(5, new IO<IO<int>>(() => Get5IO).Flattern().Run().Value);
 
         [Fact]
+        public void Apply()
+        {
+            Func<int, string> func = value => value.ToString();
+            Assert.Equal("5", Get5IO.Apply(func.ToIO()).Run().Value);
+        }
+
+        [Fact]
         public void Run()
         {
             Assert.Equal(5, Get5IO.Run().Value);

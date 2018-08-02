@@ -48,7 +48,7 @@ namespace Woz.Functional.Monads
         public static Maybe<TR> SelectMany<T1, T2, TR>(
             this Maybe<T1> maybe, Func<T1, Maybe<T2>> selector, Func<T1, T2, TR> projection)
             => maybe.SelectMany(
-                value1 => selector(value1).SelectMany(value2 => projection(value1, value2).ToMaybe()));
+                value1 => selector(value1).Select(value2 => projection(value1, value2)));
 
         public static Maybe<TR> Select<T, TR>(this Maybe<T> maybe, Func<T, TR> selector)
             => maybe.SelectMany(x => selector(x).ToMaybe());
@@ -69,7 +69,12 @@ namespace Woz.Functional.Monads
 
         #region Utility
         public static Func<Maybe<T>, Maybe<TR>> Lift<T, TR>(this Func<T, TR> function)
-            => task => task.Select(function);
+            => maybe => maybe.Select(function);
+
+        public static Maybe<TR> Apply<T, TR>(this Maybe<T> maybe, Maybe<Func<T, TR>> maybeFunction)
+            => from value in maybe
+               from function in maybeFunction
+               select function(value);
 
         public static Maybe<T> Flattern<T>(this Maybe<Maybe<T>> maybeMaybe) => maybeMaybe.SelectMany(Identity);
 

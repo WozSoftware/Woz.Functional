@@ -58,6 +58,13 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void Apply()
+        {
+            Func<int, string> func = value => value.ToString();
+            Assert.Equal("5", 5.ToLazy().Apply(func.ToLazy()).Value);
+        }
+
+        [Fact]
         public void Flattern()
         {
             bool evaluated = false;

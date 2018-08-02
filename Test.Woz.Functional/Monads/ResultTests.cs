@@ -96,6 +96,15 @@ namespace Test.Woz.Functional.Monads
         }
 
         [Fact]
+        public void Apply()
+        {
+            Func<int, string> func = value => value.ToString();
+            Assert.Equal(
+                "5", 
+                Result<int, string>.Create(5).Apply(Result<Func<int, string>, string>.Create(func)).Value);
+        }
+
+        [Fact]
         public void Flattern()
         {
             // generic vomit :)
