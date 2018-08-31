@@ -9,6 +9,13 @@ namespace Test.Woz.Functional.Monads
         private const string ErrorMessage = "Bang";
         private static readonly Result<int, string> ErrorResult = Result<int, string>.Raise(ErrorMessage);
 
+        private static readonly Func<int, Result<decimal, string>> Function1 =
+            value => Result<decimal, string>.Create(value);
+
+        private static readonly Func<decimal, Result<int, string>> Function2 =
+            value => Result<int, string>.Create(((int)value) + 1);
+
+
         [Fact]
         public void ValueState()
         {
@@ -79,12 +86,6 @@ namespace Test.Woz.Functional.Monads
 
         [Fact]
         public void KleisliIntoProjected() => Assert.Equal(11, Function1.Into(Function2, (a, b) => a + b)(5).Value);
-
-        private static readonly Func<int, Result<decimal, string>> Function1 = 
-            value => Result<decimal, string>.Create(value);
-
-        private static readonly Func<decimal, Result<int, string>> Function2 = 
-            value => Result<int, string>.Create(((int)value) + 1);
 
         [Fact]
         public void Lift()

@@ -6,6 +6,14 @@ namespace Test.Woz.Functional.Monads
 {
     public class IOTests
     {
+        private static readonly Func<int, IO<int>> Increment = value => () => value + 1;
+
+        private static readonly Func<int> Get5 = () => 5;
+        private static readonly IO<int> Get5IO = Get5.ToIO();
+
+        private static readonly Func<int> Bang = () => { throw new Exception("Bang"); };
+        private static readonly IO<int> BangIO = Bang.ToIO();
+
         [Fact]
         public void Construction() => Assert.Equal(5, Get5IO());
 
@@ -55,13 +63,5 @@ namespace Test.Woz.Functional.Monads
             Assert.Equal(5, Get5IO.Run().Value);
             Assert.Equal("Bang", BangIO.Run().Error.Message);
         }
-
-        private static Func<int, IO<int>> Increment = value => () => value + 1;
-
-        private static readonly Func<int> Get5 = () => 5;
-        private static readonly IO<int> Get5IO = Get5.ToIO();
-
-        private static readonly Func<int> Bang = () => { throw new Exception("Bang"); };
-        private static readonly IO<int> BangIO = Bang.ToIO();
     }
 }

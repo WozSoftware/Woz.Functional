@@ -7,6 +7,9 @@ namespace Test.Woz.Functional.Monads
 {
     public class AsyncTests
     {
+        public static readonly Func<int, Task<decimal>> Function1 = value => ((decimal)value).ToTask();
+        public static readonly Func<decimal, Task<int>> Function2 = value => (((int)value) + 1).ToTask();
+
         [Fact]
         public void SelectManySimple()
             => TestTask(
@@ -57,9 +60,6 @@ namespace Test.Woz.Functional.Monads
 
             Assert.Equal(11, composed(5).Result);
         }
-
-        public static readonly Func<int, Task<decimal>> Function1 = value => ((decimal)value).ToTask();
-        public static readonly Func<decimal, Task<int>> Function2 = value => (((int)value) + 1).ToTask();
 
         [Fact]
         public void Lift()

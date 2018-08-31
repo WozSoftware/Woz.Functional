@@ -98,40 +98,5 @@ namespace Woz.Functional.Monads
         public static Maybe<T> Recover<T>(this Maybe<T> maybe, Func<T> defaultFactory)
             => maybe.HasValue ? maybe : defaultFactory().ToMaybe();
         #endregion
-
-        #region IEnumerable
-        public static IEnumerable<T> ToEnumerable<T>(this Maybe<T> maybe)
-        {
-            if (maybe.HasValue)
-            {
-                yield return maybe.Value;
-            }
-        }
-
-        public static Maybe<T> MaybeMin<T>(this IEnumerable<T> enumerable)
-            => enumerable.MaybeMin(Identity);
-
-        public static Maybe<TResult> MaybeMin<T, TResult>(
-            this IEnumerable<T> enumerable, Func<T, TResult> selector)
-        {
-            var cached = enumerable as ICollection<T> ?? enumerable.ToArray();
-            return cached.Any() ? cached.Select(selector).Min().ToMaybe() : Maybe<TResult>.None;
-        }
-
-        public static Maybe<T> MaybeMax<T>(this IEnumerable<T> enumerable)
-            => enumerable.MaybeMax(Identity);
-
-        public static Maybe<TResult> MaybeMax<T, TResult>(
-            this IEnumerable<T> enumerable, Func<T, TResult> selector)
-        {
-            var cached = enumerable as ICollection<T> ?? enumerable.ToArray();
-            return cached.Any() ? cached.Select(selector).Max().ToMaybe() : Maybe<TResult>.None;
-        }
-        #endregion
-
-        #region IDictionary
-        public static Maybe<TValue> MaybeFind<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key) 
-            => dictionary.TryGetValue(key, out TValue value) ? value.ToMaybe() : Maybe<TValue>.None;
-        #endregion
     }
 }

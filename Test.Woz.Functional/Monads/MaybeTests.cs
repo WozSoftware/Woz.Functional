@@ -9,6 +9,9 @@ namespace Test.Woz.Functional.Monads
     public class MaybeTests
     {
         private static readonly Maybe<int> Some5 = 5.ToSome();
+        private static readonly Func<int, Maybe<decimal>> Function1 = value => ((decimal)value).ToSome();
+        private static readonly Func<decimal, Maybe<int>> Function2 = value => (((int)value) + 1).ToSome();
+
 
         [Fact]
         public void Construction()
@@ -86,9 +89,6 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void KleisliSelectManyFull() => Assert.Equal(11, Function1.Into(Function2, (a, b) => a + b)(5).Value);
 
-        private static readonly Func<int, Maybe<decimal>> Function1 = value => ((decimal)value).ToSome();
-        private static readonly Func<decimal, Maybe<int>> Function2 = value => (((int)value) + 1).ToSome();
-
         [Fact]
         public void Where()
         {
@@ -101,7 +101,10 @@ namespace Test.Woz.Functional.Monads
         [Fact]
         public void Lift()
         {
+#pragma warning disable IDE0039 // Use local function
             Func<int, string> func = value => value.ToString();
+#pragma warning restore IDE0039 // Use local function
+
             var liftedFunc = Maybe.Lift(func);
             Assert.Equal("5", liftedFunc(Some5).Value);
             Assert.False(liftedFunc(Maybe<int>.None).HasValue);
@@ -166,41 +169,6 @@ namespace Test.Woz.Functional.Monads
         {
             Assert.Equal(5, Some5.Recover(() => 7).Value);
             Assert.Equal(7, Maybe<int>.None.Recover(() => 7).Value);
-        }
-
-        [Fact]
-        public void ToEnumerable()
-        {
-            var some = Some5.ToEnumerable();
-            Assert.Single(some);
-            Assert.Equal(5, some.First());
-
-            Assert.False(Maybe<int>.None.ToEnumerable().Any());
-        }
-
-        [Fact]
-        public void MaybeMin()
-        {
-            Assert.Equal(1, new[] { 3, 4, 1, 6, 2 }.MaybeMin().Value);
-            Assert.Equal(1, new[] { new { Id = 2 }, new { Id = 1 } }.MaybeMin(x => x.Id).Value);
-            Assert.False(new int[0].MaybeMin().HasValue);
-        }
-
-        [Fact]
-        public void MaybeMax()
-        {
-            Assert.Equal(6, new[] { 3, 4, 1, 6, 2 }.MaybeMax().Value);
-            Assert.Equal(2, new[] { new { Id = 2 }, new { Id = 1 } }.MaybeMax(x => x.Id).Value);
-            Assert.False(new int[0].MaybeMax().HasValue);
-        }
-
-        [Fact]
-        public void MaybeFind()
-        {
-            var dict = new Dictionary<int, string> { [1] = "A", [2] = "B" };
-
-            Assert.Equal("A", dict.MaybeFind(1).Value);
-            Assert.False(dict.MaybeFind(3).HasValue);
         }
     }
 }
