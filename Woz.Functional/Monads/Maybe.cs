@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using static Woz.Functional.FreeFunctions;
 
 namespace Woz.Functional.Monads

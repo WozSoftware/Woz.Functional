@@ -21,9 +21,9 @@
 
     <PackageLicenseUrl>https://github.com/WozSoftware/Woz.Functional/blob/master/LICENSE</PackageLicenseUrl>
 
-    <AssemblyVersion>1.0.88.6818</AssemblyVersion>
+    <AssemblyVersion>1.0.89.6822</AssemblyVersion>
 
-    <FileVersion>1.0.88.6818</FileVersion>
+    <FileVersion>1.0.89.6822</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
