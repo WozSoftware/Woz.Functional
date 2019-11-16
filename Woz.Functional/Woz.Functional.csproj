@@ -13,7 +13,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>1.0.58.6822</AssemblyVersion>
     <FileVersion>1.0.58.6822</FileVersion>
-    <Version>1.0.57</Version>
+    <Version>1.0.58</Version>
     <PackageTags>C#, functional, monads, composition, curry</PackageTags>
   </PropertyGroup>
 

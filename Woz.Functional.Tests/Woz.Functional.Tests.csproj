@@ -4,6 +4,24 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Version>1.0.58</Version>
+
+    <Authors>Woz</Authors>
+
+    <Company>Woz.Software</Company>
+
+    <Description>Tests for functional code tool kit for C#</Description>
+
+    <Copyright>Woz.Software</Copyright>
+
+    <PackageProjectUrl>https://github.com/WozSoftware/Woz.Functional</PackageProjectUrl>
+
+    <RepositoryUrl>https://github.com/WozSoftware/Woz.Functional.git</RepositoryUrl>
+
+    <RepositoryType>Git</RepositoryType>
+
+    <PackageTags>C#, functional, monads, composition, curry</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
