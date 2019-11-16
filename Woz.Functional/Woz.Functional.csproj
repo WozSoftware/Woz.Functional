@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <Authors>Woz</Authors>
     <Company>Woz.Software</Company>
     <Description>Functional code tool kit for C#</Description>
@@ -9,12 +9,23 @@
     <PackageProjectUrl>https://github.com/WozSoftware/Woz.Functional</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WozSoftware/Woz.Functional.git</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageLicenseUrl>https://github.com/WozSoftware/Woz.Functional/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.58.6822</AssemblyVersion>
-    <FileVersion>1.0.58.6822</FileVersion>
-    <Version>1.0.58</Version>
+    <AssemblyVersion>2.0.1.6823</AssemblyVersion>
+    <FileVersion>2.0.1.6823</FileVersion>
+    <Version>2.01</Version>
     <PackageTags>C#, functional, monads, composition, curry</PackageTags>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

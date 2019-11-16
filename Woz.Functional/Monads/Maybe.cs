@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using static Woz.Functional.FreeFunctions;
 
 namespace Woz.Functional.Monads
@@ -36,7 +37,9 @@ namespace Woz.Functional.Monads
     {
         #region Construction
         public static Maybe<T> ToSome<T>(this T value) => Maybe<T>.Some(value);
-        public static Maybe<T> ToMaybe<T>(this T value) => value != null ? value.ToSome() : Maybe<T>.None;
+        
+        public static Maybe<T> ToMaybe<T>([AllowNull] this T value)
+            => value != null ? value.ToSome() : Maybe<T>.None;
         #endregion
 
         #region LINQ=Map/Flatmap
@@ -49,7 +52,7 @@ namespace Woz.Functional.Monads
                 value1 => selector(value1).Select(value2 => projection(value1, value2)));
 
         public static Maybe<TR> Select<T, TR>(this Maybe<T> maybe, Func<T, TR> selector)
-            => maybe.SelectMany(x => selector(x).ToMaybe());
+            => maybe.SelectMany(x => selector(x).ToSome());
 
         public static Maybe<T> Where<T>(this Maybe<T> maybe, Func<T, bool> predicate)
             => maybe.SelectMany(value => predicate(value) ? value.ToSome() : Maybe<T>.None);
@@ -94,7 +97,7 @@ namespace Woz.Functional.Monads
             => maybe.Recover(() => defaultValue);
 
         public static Maybe<T> Recover<T>(this Maybe<T> maybe, Func<T> defaultFactory)
-            => maybe.HasValue ? maybe : defaultFactory().ToMaybe();
+            => maybe.HasValue ? maybe : defaultFactory().ToSome();
         #endregion
     }
 }

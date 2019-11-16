@@ -1,27 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
-
-    <Version>1.0.58</Version>
-
+    <Version>2.01</Version>
     <Authors>Woz</Authors>
-
     <Company>Woz.Software</Company>
-
     <Description>Tests for functional code tool kit for C#</Description>
-
     <Copyright>Woz.Software</Copyright>
-
     <PackageProjectUrl>https://github.com/WozSoftware/Woz.Functional</PackageProjectUrl>
-
     <RepositoryUrl>https://github.com/WozSoftware/Woz.Functional.git</RepositoryUrl>
-
     <RepositoryType>Git</RepositoryType>
-
     <PackageTags>C#, functional, monads, composition, curry</PackageTags>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyVersion>2.0.1.6823</AssemblyVersion>
+    <FileVersion>2.0.1.6822</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +27,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Woz.Functional\Woz.Functional.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

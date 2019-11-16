@@ -22,7 +22,7 @@ namespace Woz.Functional.Monads
             this IEnumerable<T> enumerable, Func<T, TResult> selector)
         {
             var cached = enumerable as ICollection<T> ?? enumerable.ToArray();
-            return cached.Any() ? cached.Select(selector).Min().ToMaybe() : Maybe<TResult>.None;
+            return cached.Any() ? cached.Select(selector).Min().ToSome() : Maybe<TResult>.None;
         }
 
         public static Maybe<T> MaybeMax<T>(this IEnumerable<T> enumerable)
@@ -32,7 +32,7 @@ namespace Woz.Functional.Monads
             this IEnumerable<T> enumerable, Func<T, TResult> selector)
         {
             var cached = enumerable as ICollection<T> ?? enumerable.ToArray();
-            return cached.Any() ? cached.Select(selector).Max().ToMaybe() : Maybe<TResult>.None;
+            return cached.Any() ? cached.Select(selector).Max().ToSome() : Maybe<TResult>.None;
         }
     }
 }
