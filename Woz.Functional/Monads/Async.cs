@@ -21,7 +21,14 @@ namespace Woz.Functional.Monads
                 value1 => selector(value1).Select(value2 => projection(value1, value2)));
 
         public static Task<TR> Select<T, TR>(this Task<T> task, Func<T, TR> selector)
-            => task.SelectMany(value => selector(value).ToTask());
+        {
+            async Task<TR> wrapSelector()
+            {
+                var result = await task;
+                return selector(result);
+            }
+            return wrapSelector();
+        }
         #endregion
 
         #region Kleisli
