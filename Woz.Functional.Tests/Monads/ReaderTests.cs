@@ -48,7 +48,7 @@ namespace Woz.Functional.Tests.Monads
         [Fact]
         public void Lift()
         {
-            Func<int, string> func = val => val.ToString();
+            static string func(int val) => val.ToString();
             Assert.Equal("5", Reader.Lift<Env, int, string>(func)(_getAReader)(_env));
         }
 

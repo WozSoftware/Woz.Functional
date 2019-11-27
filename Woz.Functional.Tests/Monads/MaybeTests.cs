@@ -100,11 +100,9 @@ namespace Woz.Functional.Tests.Monads
         [Fact]
         public void Lift()
         {
-#pragma warning disable IDE0039 // Use local function
             Func<int, string> func = value => value.ToString();
-#pragma warning restore IDE0039 // Use local function
-
             var liftedFunc = Maybe.Lift(func);
+
             Assert.Equal("5", liftedFunc(Some5).Value);
             Assert.False(liftedFunc(Maybe<int>.None).HasValue);
         }
@@ -129,8 +127,8 @@ namespace Woz.Functional.Tests.Monads
         public void MatchMatchStyle()
         {
             const string failed = "failed";
-            string someFunc(int x) => x.ToString();
-            string noneFunc() => failed;
+            static string someFunc(int x) => x.ToString();
+            static string noneFunc() => failed;
 
             Assert.Equal("5", Some5.Match(someFunc, noneFunc));
             Assert.Equal(failed, Maybe<int>.None.Match(someFunc, noneFunc));
@@ -139,8 +137,8 @@ namespace Woz.Functional.Tests.Monads
         [Fact]
         public void MatchBindStyle()
         {
-            Maybe<string> someFunc(int x) => x.ToString().ToSome();
-            Maybe<string> noneFunc() => Maybe<string>.None;
+            static Maybe<string> someFunc(int x) => x.ToString().ToSome();
+            static Maybe<string> noneFunc() => Maybe<string>.None;
 
             Assert.Equal("5", Some5.Match(someFunc, noneFunc).Value);
             Assert.False(Maybe<int>.None.Match(someFunc, noneFunc).HasValue);

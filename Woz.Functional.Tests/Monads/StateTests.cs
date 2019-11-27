@@ -77,7 +77,7 @@ namespace Woz.Functional.Tests.Monads
         [Fact]
         public void Lift()
         {
-            Func<int, string> func = value => value.ToString();
+            static string func(int value) => value.ToString();
             var result = State.Lift<string, int, string>(func)(5.ToState<string, int>())(stateInstance);
 
             Assert.Equal(stateInstance, result.Item1);

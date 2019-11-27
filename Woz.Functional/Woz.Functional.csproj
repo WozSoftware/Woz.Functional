@@ -11,9 +11,9 @@
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl></PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.2.0</AssemblyVersion>
-    <FileVersion>2.0.2.0</FileVersion>
-    <Version>2.02</Version>
+    <AssemblyVersion>2.0.3.0</AssemblyVersion>
+    <FileVersion>2.0.3.0</FileVersion>
+    <Version>2.03</Version>
     <PackageTags>C#, functional, monads, composition, curry</PackageTags>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>

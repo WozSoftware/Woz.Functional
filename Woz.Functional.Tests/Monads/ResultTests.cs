@@ -90,8 +90,9 @@ namespace Woz.Functional.Tests.Monads
         [Fact]
         public void Lift()
         {
-            Func<int, string> func = value => value.ToString();
+            static string func(int value) => value.ToString();
             var liftedFunc = Result.Lift<int, string, string>(func);
+
             Assert.Equal("5", liftedFunc(Result<int, string>.Create(5)).Value);
             Assert.False(liftedFunc(ErrorResult).HasValue);
         }
@@ -99,7 +100,8 @@ namespace Woz.Functional.Tests.Monads
         [Fact]
         public void Apply()
         {
-            Func<int, string> func = value => value.ToString();
+            static string func(int value) => value.ToString();
+
             Assert.Equal(
                 "5",
                 Result<int, string>.Create(5).Apply(Result<Func<int, string>, string>.Create(func)).Value);
@@ -129,19 +131,18 @@ namespace Woz.Functional.Tests.Monads
         [Fact]
         public void MatchMatchStyle()
         {
-            const string failed = "failed";
-            string someFunc(int x) => x.ToString();
-            string noneFunc() => failed;
+            static string someFunc(int x) => x.ToString();
+            static string noneFunc(string e) => e;
 
             Assert.Equal("5", Result<int, string>.Create(5).Match(someFunc, noneFunc));
-            Assert.Equal(failed, ErrorResult.Match(someFunc, noneFunc));
+            Assert.Equal(ErrorMessage, ErrorResult.Match(someFunc, noneFunc));
         }
 
         [Fact]
         public void MatchBindStyle()
         {
-            Result<string, string> someFunc(int x) => Result<string, string>.Create(x.ToString());
-            Result<string, string> noneFunc() => Result<string, string>.Raise("Bang");
+            static Result<string, string> someFunc(int x) => Result<string, string>.Create(x.ToString());
+            static Result<string, string> noneFunc(string e) => Result<string, string>.Raise(e);
 
             Assert.Equal("5", Result<int, string>.Create(5).Match(someFunc, noneFunc).Value);
             Assert.False(ErrorResult.Match(someFunc, noneFunc).HasValue);

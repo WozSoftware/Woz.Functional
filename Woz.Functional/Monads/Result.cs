@@ -79,8 +79,8 @@ namespace Woz.Functional.Monads
         public static Result<T, TE> Flattern<T, TE>(this Result<Result<T, TE>, TE> resultResult) 
             => resultResult.SelectMany(Identity);
 
-        public static TR Match<T, TR, TE>(this Result<T, TE> result, Func<T, TR> someFunc, Func<TR> noneFunc)
-            => result.HasValue ? someFunc(result.Value) : noneFunc();
+        public static TR Match<T, TR, TE>(this Result<T, TE> result, Func<T, TR> someFunc, Func<TE, TR> noneFunc)
+            => result.HasValue ? someFunc(result.Value) : noneFunc(result.Error);
 
         public static Result<T, TE> Tee<T, TE>(this Result<T, TE> result, Action<T> action)
         {
